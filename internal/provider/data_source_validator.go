@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"log"
@@ -23,12 +24,12 @@ func dataSourceVersionValidator() *schema.Resource {
 		ReadContext: dataSourceVersionValidatorRead,
 
 		Schema: map[string]*schema.Schema{
-			"current_version": &schema.Schema{
+			"current_version": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Currently deployed version.",
 			},
-			"required_version": &schema.Schema{
+			"required_version": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Required version.",
@@ -48,41 +49,41 @@ func dataSourceVersionValidatorRead(ctx context.Context, d *schema.ResourceData,
 	switch digitPrefix {
 	case ">":
 		if comparison == greaterName {
-			log.Printf("Current version is greater then required. Check succeed")
+			log.Printf("current_version: %s\nrequired_version:%s\nCurrent version is greater then required. Check succeed", currentVersionString, requiredVersionString)
 			return diags
 		}
-		diags = diag.Errorf("Current version lower then required. Check failed")
+		diags = diag.Errorf("current_version: %s\nrequired_version:%s\nCurrent version lower then required. Check failed", currentVersionString, requiredVersionString)
 		return diags
 	case "<":
 		if comparison == lowerName {
-			log.Printf("Current version is lower then required. Check succeed")
+			log.Printf("current_version: %s\nrequired_version:%s\nCurrent version is lower then required. Check succeed", currentVersionString, requiredVersionString)
 			return diags
 		}
-		diags = diag.Errorf("Current version greater then required. Check failed")
+		diags = diag.Errorf("current_version: %s\nrequired_version:%s\nCurrent version greater then required. Check failed", currentVersionString, requiredVersionString)
 		return diags
 	case "":
 		if comparison == equalName {
-			log.Printf("Current version is equal required. Check succeed")
+			log.Printf("current_version: %s\nrequired_version:%s\nCurrent version is equal required. Check succeed", currentVersionString, requiredVersionString)
 			return diags
 		}
-		diags = diag.Errorf("Current version is NOT equal required. Check failed")
+		diags = diag.Errorf("current_version: %s\nrequired_version:%s\nCurrent version is NOT equal required. Check failed", currentVersionString, requiredVersionString)
 		return diags
 	case ">=":
 		if comparison == equalName || comparison == greaterName {
-			log.Printf("Current version is greater or equal required. Check succeed")
+			log.Printf("current_version: %s\nrequired_version:%s\nCurrent version is greater or equal required. Check succeed", currentVersionString, requiredVersionString)
 			return diags
 		}
-		diags = diag.Errorf("Current version is lower then required. Check failed")
+		diags = diag.Errorf("current_version: %s\nrequired_version:%s\nCurrent version is lower then required. Check failed", currentVersionString, requiredVersionString)
 		return diags
 	case "<=":
 		if comparison == equalName || comparison == lowerName {
-			log.Printf("Current version is lower or equal required. Check succeed")
+			log.Printf("current_version: %s\nrequired_version:%s\nCurrent version is lower or equal required. Check succeed", currentVersionString, requiredVersionString)
 			return diags
 		}
-		diags = diag.Errorf("Current version is greater then required. Check failed")
+		diags = diag.Errorf("current_version: %s\nrequired_version:%s\nCurrent version is greater then required. Check failed", currentVersionString, requiredVersionString)
 		return diags
 	default:
-		diags = diag.Errorf("Wrong symbols in `required_version`")
+		diags = diag.Errorf(fmt.Sprintf("required_version:%s\nWrong symbols in `required_version`", requiredVersionString))
 		return diags
 	}
 }

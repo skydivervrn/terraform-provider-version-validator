@@ -6,7 +6,7 @@ package main
 import (
 	"flag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/hashicorp/terraform-provider-scaffolding-framework/internal/provider"
+	"github.com/hashicorp/terraform-provider-version-validator/internal/provider"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
@@ -17,6 +17,7 @@ import (
 
 // Run the docs generation tool, check its repository for more information on how it works and how docs
 // can be customized.
+//go:generate go get github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 
 var (
